@@ -7,7 +7,7 @@ export default function auth({ children }) {
     return (
       <div
         style={{
-          backgroundImage: "url(/images/bg.png)",
+          backgroundImage: "url(/images/desa.jpg)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "cover",

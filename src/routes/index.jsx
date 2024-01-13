@@ -11,7 +11,13 @@ import Dashboard from "../views/Admin/Dashboard/Index";
 import PermissionsIndex from "../views/Admin/Permissions/Index";
 import RolesIndex from "../views/Admin/Roles/Index";
 import RolesCreate from "../views/Admin/Roles/Create";
-
+import { RolesEdit } from "../views/Admin/Roles/Edit";
+import { UserIndex } from "../views/Admin/Users/Index";
+import { UserCreate } from "../views/Admin/Users/Create";
+import { UserEdit } from "../views/Admin/Users/Edit";
+import { CategoriesIndex } from "../views/Admin/Categories/Index";
+import { CategoriesCreate } from "../views/Admin/Categories/Create";
+import { CategoriesEdit } from "../views/Admin/Categories/Edit";
 
 export default function RoutesIndex() {
   return (
@@ -47,7 +53,7 @@ export default function RoutesIndex() {
         }
       />
 
-<Route
+      <Route
         path="/admin/roles/create"
         element={
           <PrivateRoutes>
@@ -55,6 +61,73 @@ export default function RoutesIndex() {
           </PrivateRoutes>
         }
       />
+
+      <Route
+        path="/admin/roles/edit/:id"
+        element={
+          <PrivateRoutes>
+            <RolesEdit />
+          </PrivateRoutes>
+        }
+      />
+      
+      <Route
+        path="/admin/users"
+        element={
+          <PrivateRoutes>
+            <UserIndex />
+          </PrivateRoutes>
+        }
+      />
+
+    <Route
+        path="/admin/users/create"
+        element={
+          <PrivateRoutes>
+            <UserCreate />
+          </PrivateRoutes>
+        }
+      />
+
+      <Route
+        path="/admin/users/edit/:id"
+        element={
+          <PrivateRoutes>
+            <UserEdit />
+          </PrivateRoutes>
+        }
+      />
+
+      <Route
+        path="/admin/categories"
+        element={
+          <PrivateRoutes>
+            <CategoriesIndex />
+          </PrivateRoutes>
+        }
+      />
+
+      <Route
+        path="/admin/categories/create"
+        element={
+          <PrivateRoutes>
+            <CategoriesCreate />
+          </PrivateRoutes>
+        }
+      />
+
+      <Route
+        path="/admin/categories/edit/:id"
+        element={
+          <PrivateRoutes>
+            <CategoriesEdit />
+          </PrivateRoutes>
+        }
+      />
+
+      
+      
+      
       
 
       

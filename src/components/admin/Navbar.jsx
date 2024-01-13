@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 export default function navbar() {
 
   const [sidebarToggle, setSidebarToggle] = useState(false);
+  const user = JSON.parse(Cookies.get("user"));
 
   const sidebarToggleHandler = (e) => {
     e.preventDefault();
@@ -66,7 +67,7 @@ export default function navbar() {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <i className="fas fa-user fa-fw"></i>
+            <i className="fas fa-user fa-fw"></i>&nbsp;{user.name}
           </a>
           <ul
             className="dropdown-menu dropdown-menu-end"
