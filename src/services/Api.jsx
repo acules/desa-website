@@ -36,7 +36,7 @@ Api.interceptors.response.use(function (response) {
         Cookies.remove('permissions');
 
         //redirect "/"
-        window.location = '/';
+        window.location = '/login';
         
     } else if(403 === error.response.status) {
     

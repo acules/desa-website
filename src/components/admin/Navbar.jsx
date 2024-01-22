@@ -77,6 +77,7 @@ export default function navbar() {
               <Link className="dropdown-item" onClick={logout}>
                 Logout
               </Link>
+              <a href="/" target="_blank" className="dropdown-item">Website</a>
             </li>
           </ul>
         </li>

@@ -65,7 +65,7 @@ export default function Login() {
           <div className="text-center mb-5">
             <img src={"/images/logo-bekasi.png"} width={"100"} />
             <h4>
-              <strong className="text-white mt-3">DESA JATIMEKAR, BEKASI KOTA</strong>
+              <strong className="text-black mt-3">KAMPUNG PAMAHAN, BEKASI KOTA</strong>
             </h4>
           </div>
           <div className="card rounded-4 shadow-sm border-top-success">

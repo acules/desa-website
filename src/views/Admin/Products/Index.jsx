@@ -2,19 +2,19 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Api from "../../../services/Api";
 import Cookies from "js-cookie";
-
 import LayoutAdmin from "../../../layouts/Admin";
 import hasAnyPermission from "../../../utils/Permissions";
 import Pagination from "../../../components/general/Pagination";
+import { numberWithCommas } from "../../../utils/Number";
 
 // Untuk Delete
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import toast from "react-hot-toast";
 
-export default function RolesIndex() {
-    document.title = "Roles - Desa Digital";
-    const [roles, setRoles] = useState([]);
+export const ProductsIndex = () => {
+    document.title = "Product - Desa Digital";
+    const [products, setPosts] = useState([]);
 
     const [pagination, setPagination] = useState({
         currentPage: 0,
@@ -26,39 +26,38 @@ export default function RolesIndex() {
     const token = Cookies.get("token");
 
     //function fetchData
-  const fetchData = async (pageNumber = 1, keywords = "") => {
-    const page = pageNumber ? pageNumber : pagination.currentPage;
-
-    await Api.get(`/api/admin/roles?search=${keywords}&page=${page}`, {
+    const fetchData = async (pageNumber = 1, keywords = "") => {
+        const page = pageNumber ? pageNumber : pagination.currentPage;
     
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((response) => {
-      //set data response to state "categories"
-      setRoles(response.data.data.data);
-      setPagination(() => ({
-        currentPage: response.data.data.current_page,
-        perPage: response.data.data.per_page,
-        total: response.data.data.total,
-      }));
-    });
-  };
+        await Api.get(`/api/admin/products?search=${keywords}&page=${page}`, {
+        
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          //set data response
+          setPosts(response.data.data.data);
+          setPagination(() => ({
+            currentPage: response.data.data.current_page,
+            perPage: response.data.data.per_page,
+            total: response.data.data.total,
+          }));
+        });    
+      };
 
-  useEffect(() => {
-    //call method "fetchData"
-    window.scrollTo(0, 0);
-    fetchData();
-  }, []);
+      useEffect(() => {
+        window.scrollTo(0, 0);
+        fetchData();
+      }, []);
+    
+      const searchData = async (e) => {
+        //set value to state "keywords"
+        setKeywords(e.target.value);
+        fetchData(1, e.target.value);
+      };
 
-  const searchData = async (e) => {
-    //set value to state "keywords"
-    setKeywords(e.target.value);
-    fetchData(1, e.target.value);
-  };
-
-  //function "deleteRole"
-  const deleteRole = (id) => {
+      //function Delete Data
+  const deleteProducts = (id) => {
     //show confirm alert
     confirmAlert({
       title: "Are You Sure ?",
@@ -67,19 +66,17 @@ export default function RolesIndex() {
         {
           label: "YES",
           onClick: async () => {
-            await Api.delete(`/api/admin/roles/${id}`, {
+            await Api.delete(`/api/admin/products/${id}`, {
              
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }).then((response) => {
-              //show toast
               toast.success(response.data.message, {
                 position: "top-right",
                 duration: 4000,
               });
 
-              //call function "fetchData"
               fetchData();
             });
           },
@@ -93,17 +90,16 @@ export default function RolesIndex() {
   };
 
   return (
-    
     <LayoutAdmin>
-      <main>
+        <main>
         <div class="container-fluid px-4 mt-5">
           <div className="row">
             <div className="col-md-8">
               <div className="row">
-              {hasAnyPermission(["roles.create"]) && (
+              {hasAnyPermission(["products.create"]) && (
                   <div className="col-md-3 col-12 mb-2">
                     <Link
-                      to="/admin/roles/create"
+                      to="/admin/products/create"
                       className="btn btn-md btn-primary border-0 shadow w-100"
                       type="button"
                     >
@@ -134,64 +130,75 @@ export default function RolesIndex() {
                   <div className="table-responsive">
                     <table className="table table-bordered table-centered table-nowrap mb-0 rounded">
                       <thead className="thead-dark">
-                        <tr className="border-0">
-                        <th className="border-0" style={{ width: "5%" }}>
+                      <tr className="border-0">
+                          <th className="border-0" style={{ width: "5%" }}>
                             No.
                           </th>
-                          <th className="border-0">Role Name</th>
-                          <th className="border-0" style={{ width: "60%" }}>
-                            Permissions
+                          <th className="border-0">Title</th>
+                          <th className="border-0" style={{ width: "20%" }}>
+                            Owner
+                          </th>
+                          <th className="border-0" style={{ width: "15%" }}>
+                            Phone
+                          </th>
+                          <th className="border-0" style={{ width: "15%" }}>
+                            Price
+                          </th>
+                          <th className="border-0" style={{ width: "15%" }}>
+                            Cover
                           </th>
                           <th className="border-0" style={{ width: "15%" }}>
                             Actions
                           </th>
+                          
                         </tr>
                       </thead>
                       <tbody>
                         {
                           //cek apakah data ada
-                          roles.length > 0 ? (
+                          products.length > 0 ? (
                             //looping data "roles" dengan "map"
-                            roles.map((role, index) => (
+                            products.map((prod, index) => (
                               <tr key={index}>
                                 <td className="fw-bold text-center">
                                   {++index +
                                     (pagination.currentPage - 1) *
                                       pagination.perPage}
                                 </td>
-                                <td>{role.name}</td>
-                                <td>
-                                  {role.permissions.map((permission, index) => (
-                                    <span
-                                      className="btn btn-warning btn-sm shadow-sm border-0 ms-2 mb-2 fw-normal"
-                                      key={index}
-                                    >
-                                      {permission.name}
-                                    </span>
-                                  ))}
-                                </td>
+                                <td>{prod.title}</td>
+                                <td>{prod.owner}</td>
+                                <td>{prod.phone}</td>
+                                <td>{numberWithCommas(prod.price)}</td>
                                 <td className="text-center">
-                                  {hasAnyPermission(["roles.edit"]) && (
+                                  <img
+                                    src={prod.image}
+                                    width={"60px"}
+                                    height={"80px"}
+                                    className="rounded"
+                                  />
+                                  </td>
+                                <td >
+                                {hasAnyPermission(["products.edit"]) && (
                                     <Link
-                                      to={`/admin/roles/edit/${role.id}`}
+                                      to={`/admin/products/edit/${prod.id}`}
                                       className="btn btn-primary btn-sm me-2"
                                     >
                                       <i className="fa fa-pencil-alt"></i>
                                     </Link>
                                   )}
 
-                                  {hasAnyPermission(["roles.delete"]) && (
-                                    <button onClick={() => deleteRole(role.id)} className="btn btn-danger btn-sm">
+                                  {hasAnyPermission(["products.delete"]) && (
+                                    <button onClick={() => deleteProducts(prod.id)} className="btn btn-danger btn-sm">
                                       <i className="fa fa-trash"></i>
                                     </button>
                                   )}
-                                </td>
+                                </td>         
                               </tr>
                             ))
                           ) : (
                             //tampilkan pesan data belum tersedia
                             <tr>
-                              <td colSpan={4}>
+                              <td colSpan={7}>
                                 <div
                                   className="alert alert-danger border-0 rounded shadow-sm w-100 text-center"
                                   role="alert"
@@ -220,5 +227,5 @@ export default function RolesIndex() {
         </div>
       </main>
     </LayoutAdmin>
-  );
+  )
 }

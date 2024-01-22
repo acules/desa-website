@@ -136,9 +136,7 @@ export const UserIndex = () => {
                           </th>
                           <th className="border-0">Name</th>
                           <th className="border-0">Email</th>
-                          <th className="border-0" style={{ width: "60%" }}>
-                            Roles
-                          </th>
+                          <th className="border-0">Roles</th>
                           <th className="border-0" style={{ width: "15%" }}>
                             Actions
                           </th>
@@ -189,7 +187,7 @@ export const UserIndex = () => {
                           ) : (
                             //tampilkan pesan data belum tersedia
                             <tr>
-                              <td colSpan={2}>
+                              <td colSpan={5}>
                                 <div
                                   className="alert alert-danger border-0 rounded shadow-sm w-100 text-center"
                                   role="alert"

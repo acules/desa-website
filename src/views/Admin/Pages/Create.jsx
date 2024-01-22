@@ -5,44 +5,48 @@ import Api from "../../../services/Api";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 
-export const CategoriesCreate = () => {
-  document.title = "Create Categories - Desa Digital";
+// Library WSIWYG
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+export const PagesCreate = () => {
+  document.title = "Create Pages - Desa Digital";
   const navigate = useNavigate();
+
   //define state for form
-  const [names, setName] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   const [errors, setErros] = useState([]);
   const token = Cookies.get("token");
 
-  const storeCategory = async (e) => {
+  const storePages = async (e) => {
     e.preventDefault();
 
+    //define formData
+    const formData = new FormData();
+
+    //append data to "formData"
+    formData.append("title", title);
+    formData.append("content", content);
+
     //sending data
-    await Api.post(
-      "/api/admin/categories",
-      {
-        //data
-        name: names,
+    await Api.post("/api/admin/pages", formData, {
+    
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "content-type": "multipart/form-data",
-        },
-      }
-    )
+    })
       .then((response) => {
-        //show toast
         toast.success(response.data.message, {
           position: "top-right",
           duration: 4000,
         });
 
-        //redirect
-        navigate("/admin/categories");
+        navigate("/admin/pages");
       })
       .catch((error) => {
-        //set error message to state "errors"
         setErros(error.response.data);
       });
   };
@@ -54,7 +58,7 @@ export const CategoriesCreate = () => {
           <div className="row">
             <div className="col-md-12">
               <Link
-                to="/admin/categories"
+                to="/admin/pages"
                 className="btn btn-md btn-primary border-0 shadow-sm mb-3"
                 type="button"
               >
@@ -63,23 +67,41 @@ export const CategoriesCreate = () => {
               <div className="card border-0 rounded shadow-sm border-top-success">
                 <div className="card-body">
                   <h6>
-                    <i className="fa fa-folder"></i> Create Categories
+                    <i className="fa fa-pencil-alt"></i> Create Data Pages
                   </h6>
                   <hr />
-                  <form onSubmit={storeCategory}>
+                  <form onSubmit={storePages}>
                     <div className="mb-3">
-                      <label className="form-label fw-bold">Name</label>
+                      <label className="form-label fw-bold">Title</label>
                       <input
                         type="text"
                         className="form-control"
-                        value={names}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Enter Category Name"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Enter Title Post"
                       />
                     </div>
-                    {errors.name && (
-                      <div className="alert alert-danger">{errors.name[0]}</div>
+                    {errors.title && (
+                      <div className="alert alert-danger">
+                        {errors.title[0]}
+                      </div>
                     )}
+
+                    <div className="mb-3">
+                      <label className="form-label fw-bold">Content</label>
+                      <ReactQuill
+                        theme="snow"
+                        rows="5"
+                        value={content}
+                        onChange={(content) => setContent(content)}
+                      />
+                    </div>
+                    {errors.content && (
+                      <div className="alert alert-danger">
+                        {errors.content[0]}
+                      </div>
+                    )}
+
                     <div>
                       <button
                         type="submit"

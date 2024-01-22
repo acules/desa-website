@@ -12,7 +12,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import toast from "react-hot-toast";
 
 export const CategoriesIndex = () => {
-    document.title = "Roles - Desa Digital";
+    document.title = "Categories - Desa Digital";
     const [categories, setCategories] = useState([]);
 
     const [pagination, setPagination] = useState({
@@ -175,7 +175,7 @@ export const CategoriesIndex = () => {
                           ) : (
                             //tampilkan pesan data belum tersedia
                             <tr>
-                              <td colSpan={2}>
+                              <td colSpan={3}>
                                 <div
                                   className="alert alert-danger border-0 rounded shadow-sm w-100 text-center"
                                   role="alert"
